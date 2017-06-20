@@ -1,0 +1,18 @@
+startup_message off
+autodetach on
+hardstatus on
+hardstatus alwayslastline "%-Lw%{= BW}%50>%n%f* %t%{-}%+Lw%<"
+vbell on
+
+defscrollback 4096
+#sessionname main_apps
+#monitor
+#screen -t tf 0 tf
+
+#screen -t s 1 bash
+#screen 2 bash
+
+#screen -t IM 2 centericq
+#monitor on
+#select 1
+

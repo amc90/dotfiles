@@ -1,0 +1,6 @@
+[user]
+	name = ash
+	email = ashley.m.crowther+git@gmail.com
+
+[push]
+	default = matching

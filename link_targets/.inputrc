@@ -1,0 +1,15 @@
+
+#hopefully this will make home and end work.
+"\e[1~": beginning-of-line
+"\e[4~": end-of-line
+
+set bell-style none
+
+#Note that all below here is untested:
+
+#8 bit input. Regardless of term don't strip 8th bit
+set input-meta on
+#don't convert chars with 8th bit set to ESC+7bit char
+set convert-meta off
+#Output 8 bit chars directly
+set output-meta on

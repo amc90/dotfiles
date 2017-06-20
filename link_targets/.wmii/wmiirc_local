@@ -1,0 +1,68 @@
+#!/bin/dash -f
+
+MODKEY=Mod4
+
+noticetimeout=60
+
+WMII_NORMCOLORS='#888888 #222222 #333333'
+WMII_FOCUSCOLORS='#ffffff #285577 #4c7899'
+
+WMII_BACKGROUND='#333333'
+WMII_FONT='fixed'
+
+WMII_TERM=uxterm
+
+#cat stdin. If no lines print $1 instead
+replace_empty_string() {
+	awk -ve=$1 '{print} END{if(!NR)print e}'
+}
+
+#List of tags. If parameter given only tags regex matching apply
+tag_list() {
+	wmiir ls /tag|awk -vr=$1 '($0!="sel/")&&($0~r) {sub(/[/]/,""); print}'
+}
+
+#Ripped from suckless.org
+next_tag() {
+	awk -vcurtag=$(wmiir read /tag/sel/ctl | sed 1q) '
+		NR==1 {ret=$0;}
+		$0==curtag { if(getline) ret=$0; exit }
+		END {print ret}'
+}
+
+# Status Bar Info
+status() {
+	if test -f '/sys/class/power_supply/BAT0/status'
+	then
+		state=`cat /sys/class/power_supply/BAT0/status`
+		energy_now=`cat /sys/class/power_supply/BAT0/energy_now`
+		energy_full=`cat /sys/class/power_supply/BAT0/energy_full`
+		status_bat="| $state ["`expr $energy_now "*" 100 "/" $energy_full `"%]"
+	else
+		status_bat=""
+	fi
+	echo -n label `uptime | sed 's/.*://; s/,//g'` '|' \
+		`date '+%a %F %T'` "$status_bat"
+}
+
+startup() {
+	witray -N -V &
+}
+
+wi_events <<'!'
+Key $MODKEY-bracketleft
+	wmiir xwrite /ctl view `tag_list | tac | next_tag`
+Key $MODKEY-bracketright
+	wmiir xwrite /ctl view `tag_list | next_tag`
+!
+
+for i in 0 1 2 3 4 5 6 7 8 9; do
+	wi_events <<!
+Key $MODKEY-$i		 # Cycle through tags beginning with number
+	wmiir xwrite /ctl view \`tag_list "^$i"|replace_empty_string $i|next_tag\`
+Key $MODKEY-Shift-$i     # Retag selected client with the numbered tag  (or tag beginning with number if exists)
+	wmiir xwrite /client/sel/tags \`tag_list "^$i"|replace_empty_string $i|next_tag\`
+!
+done
+
+
