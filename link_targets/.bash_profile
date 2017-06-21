@@ -13,6 +13,11 @@ if [ -f ~/.bashrc ]; then
     . ~/.bashrc
 fi
 
+# include .bashrc if it exists
+if [ -f ~/.profile ]; then
+    . ~/.profile
+fi
+
 # set PATH so it includes user's private bin if it exists
 if [ -d ~/bin ] ; then
     PATH=~/bin:"${PATH}"
@@ -27,7 +32,15 @@ fi
 export 'VISUAL=/usr/bin/vim'
 export 'EDITOR=/usr/bin/vim'
 export 'PAGER=/usr/bin/less'
+export 'BROWSER=/usr/bin/chromium'
 
 export GOPATH=~/go
+
+#Merge in the system flags too:
+
+if [ -f /etc/chromium/default ] ; then
+  . /etc/chromium/default
+fi
+export CHROMIUM_USER_FLAGS="$CHROMIUM_FLAGS --password-store=detect --new-window"
 
 screen -list

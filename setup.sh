@@ -3,6 +3,7 @@
 if [ "$#" != 1 -o "$1" = "--help" -o "$1" = "-h" ]
 then
 	echo "Syntax: $0 <home_directory>">&2
+	exit 1
 fi
 HOMEDIR="$1"
 
@@ -33,7 +34,7 @@ ensure_link () {
 	fi
 }
 (
-	cd "./link_targets"
+	cd "./link_targets"||exit 127
 	find . -type d|while read DIR
 	do
 		mkdir -p "$DIR"
