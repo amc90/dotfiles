@@ -1,0 +1,98 @@
+#!/bin/bash
+
+#Knuth's "The Art of Computer Programming", volume 3 "Sorting and Searching", chapter 6.4
+function hash()
+{
+	awk '
+		BEGIN\
+		{
+			for(i=0;i<=256;i++)
+				chars[sprintf("%c", i)]=i;
+		}
+		{
+			out=out $0;
+
+		}
+		END\
+		{
+			len=length(out);
+			hash=len
+			for(i=0; i<len; i++)
+			{
+				c=chars[substr(out,i+1,1)];
+				hash=xor(lshift(hash, 5), rshift(hash, 27));
+				hash=xor(hash, c);
+			}
+
+			printf("%d\n", hash)
+		}
+	'
+}
+
+function _username()
+{
+	if which whoami>>/dev/null
+	then
+		whoami
+	else
+		echo $LOGNAME
+	fi
+}
+
+function _hostname()
+{
+	if which hostname>>/dev/null
+	then
+		hostname
+	else
+		uname -n
+	fi
+}
+
+#Pass hash and number of colours to return. Each colour only returned once.
+function choose_colours
+{
+	awk -v hash=$1 -v count=$2 '
+		BEGIN\
+		{
+			c_sz=0;
+			for(counti=1; counti<7; counti++)
+			{
+				//Skip blue entirely
+				if(counti!=4)
+				{
+					colours[c_sz++]=sprintf("\\e[0m\\e[3%dm", counti);
+					colours[c_sz++]=sprintf("\\e[1m\\e[3%dm", counti);
+				}
+			}
+
+			out="";
+			for(counti=0; counti<count; counti++)
+			{
+				out=out extract_colour() " ";
+			}
+			print out;
+		}
+		function extract_colour()
+		{
+			i=hash%c_sz;
+			colour=colours[i];
+			if(i<c_sz-1)
+				colours[i]=colours[c_sz-1];
+			delete colours[--c_sz];
+			return colour;
+		}
+
+'
+}
+
+TOHASH=`_username``_hostname`
+HASH=`echo $TOHASH|hash`
+
+COLOURS=`choose_colours $HASH 3`
+C1=`echo $COLOURS|cut -f1 -d' '`
+C2=`echo $COLOURS|cut -f2 -d' '`
+C3=`echo $COLOURS|cut -f3 -d' '`
+
+PS1="\[$C1\]\$? \[$C2\]\u@\h:\[$C3\]\w[\j]\[\e[0m\] "
+

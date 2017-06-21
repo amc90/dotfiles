@@ -1,3 +1,5 @@
 .*.sw[po]
-.*~
+*~
 Thumbs.db
+/link_targets.local
+
