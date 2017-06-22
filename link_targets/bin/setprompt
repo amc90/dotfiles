@@ -1,32 +1,9 @@
 #!/bin/bash
 
-#Knuth's "The Art of Computer Programming", volume 3 "Sorting and Searching", chapter 6.4
 function hash()
 {
-	awk '
-		BEGIN\
-		{
-			for(i=0;i<=256;i++)
-				chars[sprintf("%c", i)]=i;
-		}
-		{
-			out=out $0;
-
-		}
-		END\
-		{
-			len=length(out);
-			hash=len
-			for(i=0; i<len; i++)
-			{
-				c=chars[substr(out,i+1,1)];
-				hash=xor(lshift(hash, 5), rshift(hash, 27));
-				hash=xor(hash, c);
-			}
-
-			printf("%d\n", hash)
-		}
-	'
+	n=$(md5sum <<< "$1")
+	echo $((0x${n%% *}))
 }
 
 function _username()
@@ -43,7 +20,7 @@ function _hostname()
 {
 	if which hostname>>/dev/null
 	then
-		hostname
+		hostname -f
 	else
 		uname -n
 	fi
@@ -87,8 +64,7 @@ function choose_colours
 }
 
 TOHASH=`_username``_hostname`
-HASH=`echo $TOHASH|hash`
-
+HASH="$(hash "$TOHASH")"
 COLOURS=`choose_colours $HASH 3`
 C1=`echo $COLOURS|cut -f1 -d' '`
 C2=`echo $COLOURS|cut -f2 -d' '`
