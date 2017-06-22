@@ -6,16 +6,6 @@ function hash()
 	echo $((0x${n%% *}))
 }
 
-function _username()
-{
-	if which whoami>>/dev/null
-	then
-		whoami
-	else
-		echo $LOGNAME
-	fi
-}
-
 function _hostname()
 {
 	if which hostname>>/dev/null
@@ -63,7 +53,7 @@ function choose_colours
 '
 }
 
-TOHASH=`_username``_hostname`
+TOHASH=`_hostname`
 HASH="$(hash "$TOHASH")"
 COLOURS=`choose_colours $HASH 3`
 C1=`echo $COLOURS|cut -f1 -d' '`
