@@ -62,6 +62,12 @@ Key $MODKEY-$i		 # Cycle through tags beginning with number
 	wmiir xwrite /ctl view \`tag_list "^$i"|replace_empty_string $i|next_tag\`
 Key $MODKEY-Shift-$i     # Retag selected client with the numbered tag  (or tag beginning with number if exists)
 	wmiir xwrite /client/sel/tags \`tag_list "^$i"|replace_empty_string $i|next_tag\`
+Key XF86AudioRaiseVolume
+	amixer set Master 2+
+Key XF86AudioLowerVolume
+	amixer set Master 2-
+Key XF86AudioMute
+	amixer set Master toggle
 !
 done
 
