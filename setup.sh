@@ -30,6 +30,7 @@ fi
 
 HOMEDIR="$1"
 
+cd "$(readlink -f "$(dirname "$0")")"
 if [ ! -d "./link_targets" ]
 then
 	echo "Failed to find ./link_targets">&2
