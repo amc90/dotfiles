@@ -43,4 +43,7 @@ if [ -f /etc/chromium/default ] ; then
 fi
 export CHROMIUM_USER_FLAGS="$CHROMIUM_FLAGS --password-store=detect --new-window"
 
-screen -list
+if which gopass>/dev/null; then
+	source <(gopass completion bash)
+fi
+
