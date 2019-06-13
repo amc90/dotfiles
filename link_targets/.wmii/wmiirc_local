@@ -54,6 +54,8 @@ Key $MODKEY-bracketleft
 	wmiir xwrite /ctl view `tag_list | tac | next_tag`
 Key $MODKEY-bracketright
 	wmiir xwrite /ctl view `tag_list | next_tag`
+Menu Client-3-Kill
+	xmessage -print Are you sure? -buttons Yes:0,No:1 -timeout 15 -default No && wmiir xwrite /client/$1/ctl slay
 !
 
 for i in 0 1 2 3 4 5 6 7 8 9; do
