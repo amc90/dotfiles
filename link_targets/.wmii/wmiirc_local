@@ -32,15 +32,25 @@ next_tag() {
 
 # Status Bar Info
 status() {
+	status_colour="colors $WMII_NORMCOLORS"
 	if test -f '/sys/class/power_supply/BAT0/status'
 	then
 		state=`cat /sys/class/power_supply/BAT0/status`
-		energy_now=`cat /sys/class/power_supply/BAT0/energy_now`
-		energy_full=`cat /sys/class/power_supply/BAT0/energy_full`
-		status_bat="| $state ["`expr $energy_now "*" 100 "/" $energy_full `"%]"
+		if test -f '/sys/class/power_supply/BAT0/energy_now'
+		then
+			energy_now=`cat /sys/class/power_supply/BAT0/energy_now`
+			energy_full=`cat /sys/class/power_supply/BAT0/energy_full`
+		else
+			energy_now=`cat /sys/class/power_supply/BAT0/charge_now`
+			energy_full=`cat /sys/class/power_supply/BAT0/charge_full`
+		fi
+		bat_level=`expr $energy_now "*" 100 "/" $energy_full`
+		test "$bat_level" -lt "25" && status_colour='colors #CCCCCC #880000 #333333'
+		status_bat="| $state [$bat_level%]"
 	else
 		status_bat=""
 	fi
+	echo "$status_colour"
 	echo -n label `uptime | sed 's/.*://; s/,//g'` '|' \
 		`date '+%a %F %T'` "$status_bat"
 }
