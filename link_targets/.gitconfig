@@ -1,6 +1,9 @@
-[user]
-	name = ash
-	email = ashley.m.crowther+git@gmail.com
+#The expectation being that an include will contain
+#[user]
+#email =
+#name =
+[include]
+	path = "~/.gitconfig.include"
 
 [push]
 	default = matching
