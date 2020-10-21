@@ -6,6 +6,8 @@ noticetimeout=60
 
 WMII_NORMCOLORS='#888888 #222222 #333333'
 WMII_FOCUSCOLORS='#ffffff #285577 #4c7899'
+WMII_FOCUSURGENTCOLORS='#000000 #dd8000 #ffffff'
+WMII_URGENTCOLORS='#bbbbbb #b95000 #333333'
 
 WMII_BACKGROUND='#333333'
 WMII_FONT='fixed'
@@ -23,11 +25,16 @@ tag_list() {
 }
 
 #Ripped from suckless.org
+#Requires list of tags on stdin
 next_tag() {
 	awk -vcurtag=$(wmiir read /tag/sel/ctl | sed 1q) '
 		NR==1 {ret=$0;}
 		$0==curtag { if(getline) ret=$0; exit }
 		END {print ret}'
+}
+
+selected_tag() {
+	wmiir read /ctl|awk '/^view /{gsub("^view ", "");print $0}'
 }
 
 # Status Bar Info
@@ -55,11 +62,43 @@ status() {
 		`date '+%a %F %T'` "$status_bat"
 }
 
+is_urgent() {
+	wmiir cat "/tag/$1/ctl"|awk '/^urgent on$/{e=1} END{exit !e}';
+}
+
 startup() {
 	witray -N -V &
 }
 
 wi_events <<'!'
+Event FocusTag
+	if is_urgent "$@"; then
+		wmiir xwrite "/lbar/$@" colors "$WMII_FOCUSURGENTCOLORS"
+	else
+		wmiir xwrite "/lbar/$@" colors "$WMII_FOCUSCOLORS"
+	fi
+Event UnfocusTag
+	if is_urgent "$@"; then
+		wmiir xwrite "/lbar/$@" colors "$WMII_URGENTCOLORS"
+	else
+		wmiir xwrite "/lbar/$@" colors "$WMII_NORMCOLORS"
+	fi
+Event UrgentTag #Technically we probably should scan for active tags at wmii startup
+	shift
+	wmiir xwrite "/lbar/$@" label "*$@"
+	if [ "$@" = "$(selected_tag)" ]; then
+		wmiir xwrite "/lbar/$@" colors "$WMII_FOCUSURGENTCOLORS"
+	else
+		wmiir xwrite "/lbar/$@" colors "$WMII_URGENTCOLORS"
+	fi
+Event NotUrgentTag
+	shift
+	wmiir xwrite "/lbar/$@" label "$@"
+	if [ "$@" = "$(selected_tag)" ]; then
+		wmiir xwrite "/lbar/$@" colors "$WMII_FOCUSCOLORS"
+	else
+		wmiir xwrite "/lbar/$@" colors "$WMII_NORMCOLORS"
+	fi
 Key $MODKEY-bracketleft
 	wmiir xwrite /ctl view `tag_list | tac | next_tag`
 Key $MODKEY-bracketright
@@ -82,5 +121,4 @@ Key XF86AudioMute
 	amixer set Master toggle
 !
 done
-
 
