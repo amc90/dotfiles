@@ -28,7 +28,10 @@ Emacs*font: 10x20
 !*VT100.translations: #override <Btn1Up>: select-end(PRIMARY, CLIPBOARD, CUT_BUFFER0)
 
 !#Other
-*VT100*font: fixed
+*VT100*font: -misc-fixed-*-r-normal--20-*-*-*-c-*-iso10646-1
+*VT100.utf8Fonts.font: -misc-fixed-*-r-normal--20-*-*-*-c-*-iso10646-1
+xterm*font: -misc-fixed-*-r-normal--20-*-*-*-c-*-iso10646-1
+
 !Use bash_profile:
 *VT100*loginShell: true
 !*VT100*saveLines: 2000
