@@ -32,7 +32,7 @@ fi
 export 'VISUAL=/usr/bin/vim'
 export 'EDITOR=/usr/bin/vim'
 export 'PAGER=/usr/bin/less'
-export 'BROWSER=/usr/bin/chromium'
+#Seems to override other URL handlers for xdg-open export 'BROWSER=/usr/bin/chromium'
 
 export GOPATH=~/go
 
