@@ -1,0 +1,5 @@
+#!/bin/bash
+
+#Some form of bash bug not resetting
+reset
+printf '\033[3;0m' 

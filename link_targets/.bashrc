@@ -79,6 +79,7 @@ alias la='ls -A'
 alias l='ls -CF'
 
 if which todo-txt>/dev/null; then
+	alias todoe='vim ~/.todo-txt/todo.txt'
 	alias todo='todo-txt -ct'
 	_completion_loader todo-txt
 	complete -F _todo todo
@@ -93,5 +94,9 @@ if ! shopt -oq posix; then
 	elif [ -f /etc/bash_completion ]; then
 		. /etc/bash_completion
 	fi
+fi
+
+if which op>/dev/null; then
+	alias ops='eval $(op signin magellanrobotech)'
 fi
 
