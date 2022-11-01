@@ -31,6 +31,7 @@ Emacs*font: 10x20
 *VT100*font: -misc-fixed-*-r-normal--20-*-*-*-c-*-iso10646-1
 *VT100.utf8Fonts.font: -misc-fixed-*-r-normal--20-*-*-*-c-*-iso10646-1
 xterm*font: -misc-fixed-*-r-normal--20-*-*-*-c-*-iso10646-1
+xterm*visualBell: true
 
 !Use bash_profile:
 *VT100*loginShell: true
