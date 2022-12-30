@@ -5,7 +5,7 @@ while [[ $1 = -* ]]; do
 	case $1 in
 		-h|--help)
 			cat <<EOF >&2
-Syntax: $0 [-a] <home_directory
+Syntax: $0 [-a] <home_directory>
 
   -a   Actually make changes (otherwise nothing will actually be done)
 
