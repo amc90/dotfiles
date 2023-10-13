@@ -74,7 +74,7 @@ startup() {
 # Tagging Rules
 wmiir write /rules <<!
 	#Custom:
-	/^Navigator:Firefox:/ group=0
+	/Firefox/ group=0
 
 	#Defaults:
 
