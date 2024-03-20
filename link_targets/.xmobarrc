@@ -1,0 +1,39 @@
+Config { overrideRedirect = False
+       , font     = "xft:iosevka-9"
+       , bgColor  = "#111111"
+       , fgColor  = "#f8f8f2"
+       , position = BottomW L 90
+       , commands = [ Run Weather "EGGP"
+                        [ "--template", "<weather> <tempC>°C"
+                        , "-L", "0"
+                        , "-H", "25"
+                        , "--low"   , "lightblue"
+                        , "--normal", "#f8f8f2"
+                        , "--high"  , "red"
+                        ] 36000
+                    , Run Network "enp0s25" [] 10
+                    , Run Network "wlp3s0" [] 10
+                    , Run Cpu
+                        [ "-L", "3"
+                        , "-H", "50"
+                        , "--high"  , "red"
+                        , "--normal", "green"
+                        , "-w"  , "5"
+                        ] 10
+                    , Run Alsa "default" "Master"
+                        [ "--template", "<volumestatus>"
+                        , "--suffix"  , "True"
+                        , "--"
+                        , "--on", ""
+                        ]
+                    , Run Memory ["--template", "Mem: <usedratio>%"] 10
+                    , Run Swap [] 10
+                    , Run Date "%a %Y-%m-%d <fc=#8be9fd>%H:%M:%S</fc>" "date" 10
+                    , Run Battery [] 20
+                    , Run UnsafeXMonadLog
+                    ]
+       , sepChar  = "%"
+       , alignSep = "}{"
+       , template = "%EGGP% | %UnsafeXMonadLog% }{ %enp0s25% %wlp3s0% | %alsa:default:Master% | %cpu% | %memory% | %swap% | %battery% | %date% "
+       }
+
