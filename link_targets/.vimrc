@@ -1,5 +1,3 @@
-" execute pathogen#infect()
-
 " Load from .vim/pack/plugins/start
 packloadall
 
