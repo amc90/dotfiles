@@ -1,0 +1,3 @@
+[submodule "link_targets/.vim/pack/plugins/start/vim-table-mode"]
+	path = link_targets/.vim/pack/plugins/start/vim-table-mode
+	url = https://github.com/dhruvasagar/vim-table-mode
