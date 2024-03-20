@@ -1,5 +1,8 @@
 " execute pathogen#infect()
 
+" Load from .vim/pack/plugins/start
+packloadall
+
 set nocompatible
 set backspace=indent,eol,start
 set backup
