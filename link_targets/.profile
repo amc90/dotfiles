@@ -16,7 +16,16 @@ if [ -n "$BASH_VERSION" ]; then
     fi
 fi
 
-# set PATH so it includes user's private bin if it exists
 if [ -d "$HOME/bin" ] ; then
-    PATH="$HOME/bin:$PATH"
+	#Xmonad seems to be doing PATH correctly for a new terminal (because its a login 
+	#shell?) but launching dmenu doesn't work, so we set it there too. On the other 
+	#hand, setting PATH in both .profile #and .xsessionrc can cause a duplicate. Hence:
+	case ":${PATH}:" in
+		*":$HOME/bin:"*)
+			;;
+		*)
+			PATH="$HOME/bin:${PATH}"
+			;;
+	esac
 fi
+
