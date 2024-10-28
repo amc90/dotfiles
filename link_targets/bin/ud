@@ -1,0 +1,3 @@
+#!/bin/bash
+/usr/bin/xterm -e /bin/bash -l -c 'sudo ifdown -a;sleep 1; sudo ifup -a;read -n1 -t5'
+
