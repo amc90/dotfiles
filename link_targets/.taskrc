@@ -1,0 +1,83 @@
+# [Created by task 2.6.2 11/27/2023 21:31:16]
+# Taskwarrior program configuration file.
+# For more documentation, see https://taskwarrior.org or try 'man task', 'man task-color',
+# 'man task-sync' or 'man taskrc'
+
+# Here is an example of entries that use the default, override and blank values
+#   variable=foo   -- By specifying a value, this overrides the default
+#   variable=      -- By specifying no value, this means no default
+#   #variable=foo  -- By commenting out the line, or deleting it, this uses the default
+
+# You can also refence environment variables:
+#   variable=$HOME/task
+#   variable=$VALUE
+
+# Use the command 'task show' to see all defaults and overrides
+
+# Files
+data.location=/home/ash/.task
+
+# To use the default location of the XDG directories,
+# move this configuration file from ~/.taskrc to ~/.config/task/taskrc and uncomment below
+
+#data.location=~/.local/share/task
+#hooks.location=~/.config/task/hooks
+
+# Color theme (uncomment one to use)
+#include light-16.theme
+#include light-256.theme
+#include dark-16.theme
+include dark-256.theme
+#include dark-red-256.theme
+#include dark-green-256.theme
+#include dark-blue-256.theme
+#include dark-violets-256.theme
+#include dark-yellow-green.theme
+#include dark-gray-256.theme
+#include dark-gray-blue-256.theme
+#include solarized-dark-256.theme
+#include solarized-light-256.theme
+#include no-color.theme
+
+taskd.certificate=\/home\/ash\/.task\/ash.cert.pem
+taskd.key=\/home\/ash\/.task\/ash.key.pem
+taskd.ca=\/home\/ash\/.task\/ca.cert.pem
+taskd.server=chariot.violet.im:53589
+taskd.credentials=violet.im\/ash\/3fe8b6cf-f0e5-4e27-a1a7-cb8074bc99fe
+news.version=2.6.0
+uda.reviewed.type=date
+uda.reviewed.label=Reviewed
+report._reviewed.description=Tasksh review report.  Adjust the filter to your needs.
+report._reviewed.columns=uuid
+report._reviewed.sort=reviewed+,modified+
+report._reviewed.filter=( reviewed.none: or reviewed.before:now-6days ) and ( +PENDING or +WAITING )
+context.needpossum.read=+needpossum
+context.needpossum.write=+needpossum
+context.neednick.read=+neednick
+context.neednick.write=+neednick
+context.outdoor.read=+outdoor
+context.outdoor.write=+outdoor
+context.indoor.read=+indoor
+context.indoor.write=+indoor
+context.atcomputer.read=+atcomputer
+context.atcomputer.write=+atcomputer
+context.onphone.read=+onphone
+context.onphone.write=+onphone
+context.phonecall.read=+phonecall
+context.phonecall.write=+phonecall
+context.athousemeet.read=+athousemeet
+context.athousemeet.write=+athousemeet
+context.shoponline.read=+shoponline
+context.shoponline.write=+shoponline
+context.shop.read=+shop
+context.shop.write=+shop
+report.nocontext.description=Match anything not included in a context
+report.nocontext.context=0
+context.email.read=+email
+context.email.write=+email
+report.nocontext.filter=(!((+atcomputer) or (+athousemeet) or (+email) or (+indoor) or (+maybe) or (+neednick) or (+needpossum) or (+onphone) or (+outdoor) or (+phonecall) or (+shop) or (+shoponline)))
+report.nocontext.columns=id,start.age,entry.age,depends.indicator,priority,project,tags,recur.indicator,scheduled.countdown,due,until.remaining,description.count,urgency
+report.nocontext.labels=ID,Active,Age,D,P,Project,Tags,R,Sch,Due,Until,Description,Urg
+report.nocontext.sort=start-,due+,project+,urgency-
+context.maybe.read=+maybe
+context.maybe.write=+maybe

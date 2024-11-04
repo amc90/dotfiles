@@ -5,18 +5,36 @@ TASK() {
 		grep -v '^Config file [-_./a-zA-Z0-9]* modified.$'
 }
 
-FILTER="$(
-	task show 'context.'|
-	#List every context filter
-	sed -nE 's/^context\.[a-zA-Z0-9]*\.read +//p'|
+CONTEXT_FILTER_LIST="$(task show context.|sed -nE 's/^context\.[a-zA-Z0-9]*\.read +//p')"
+
+#Create a nocontext report that lists anything not included in a context:
+NOCONTEXT_FILTER="$(
+	echo "$CONTEXT_FILTER_LIST"|
 	#Output as a negated expression
 	awk 'BEGIN{printf "(!("}{printf "%s(%s)", (FNR==1?"":" or "), $1}END{print "))"}')"
 
 TASK config report.nocontext.description 'Match anything not included in a context'
-TASK config report.nocontext.filter       "$FILTER"
+TASK config report.nocontext.filter       "$NOCONTEXT_FILTER"
 TASK config report.nocontext.context 0
-
 TASK config report.nocontext.columns     'id,start.age,entry.age,depends.indicator,priority,project,tags,recur.indicator,scheduled.countdown,due,until.remaining,description.count,urgency'
 TASK config report.nocontext.labels      'ID,Active,Age,D,P,Project,Tags,R,Sch,Due,Until,Description,Urg'
 TASK config report.nocontext.sort        'start-,due+,project+,urgency-'
+
+#Create _context_tag_task_ which has every tag mentioned in a context (so tags show up on phone app)
+set -x
+CONTEXT_TAGS() {
+	echo "$CONTEXT_FILTER_LIST"|
+	egrep '[+][-_a-z]+' -o|
+	sort|
+	awk '{gsub("+","");printf "%s%s",(NR==1?"":","),$0}'
+}
+
+CONTEXT_TAG_TASK="$(TASK description.is:_context_tag_task_ _unique uuid|head -n1)"
+if [ ! "$CONTEXT_TAG_TASK" ]; then
+	TASK add _context_tag_task_
+	CONTEXT_TAG_TASK="$(TASK description.is:_context_tag_task_ _unique uuid|head -n1)"
+fi
+echo $CONTEXT_TAG_TASK
+CONTEXT_TAGS
+TASK description.is:_context_tag_task_ modify tags:"$(CONTEXT_TAGS)"
 
